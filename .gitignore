@@ -1,0 +1,17 @@
+.project
+.idea
+.gradle
+.settings
+.DS_Store
+.classpath
+*.iml
+*.ipr
+*.iws
+build/
+generated/
+*.MF
+## for front-end ##
+node_modules/
+ming_timer_log/
+
+.nb-gradle
