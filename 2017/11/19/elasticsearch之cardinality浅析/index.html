@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="elasticsearch,cardinality,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="引言大数据时代,类似sum求和或者avg平均值的操作还是相对容易,而比如类似算网站uv或者找出网站访问最频繁访客会比较困难,es中提供了一种cardinality聚合来解决这类问题.123456789101112131415161718curl -XGET &amp;quot;http://localhost:9200/_search&amp;quot; -d&amp;apos;&amp;#123;    &amp;quot;aggs&amp;">
+<meta name="keywords" content="elasticsearch,cardinality">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch之cardinality浅析">
+<meta property="og:url" content="https://alreadygo.github.io/2017/11/19/elasticsearch之cardinality浅析/index.html">
+<meta property="og:site_name" content="AlreadyGo">
+<meta property="og:description" content="引言大数据时代,类似sum求和或者avg平均值的操作还是相对容易,而比如类似算网站uv或者找出网站访问最频繁访客会比较困难,es中提供了一种cardinality聚合来解决这类问题.123456789101112131415161718curl -XGET &amp;quot;http://localhost:9200/_search&amp;quot; -d&amp;apos;&amp;#123;    &amp;quot;aggs&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://alreadygo.github.io/images/lc.png">
+<meta property="og:image" content="https://alreadygo.github.io/images/cardinality_error.png">
+<meta property="og:updated_time" content="2019-10-10T11:48:38.202Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="elasticsearch之cardinality浅析">
+<meta name="twitter:description" content="引言大数据时代,类似sum求和或者avg平均值的操作还是相对容易,而比如类似算网站uv或者找出网站访问最频繁访客会比较困难,es中提供了一种cardinality聚合来解决这类问题.123456789101112131415161718curl -XGET &amp;quot;http://localhost:9200/_search&amp;quot; -d&amp;apos;&amp;#123;    &amp;quot;aggs&amp;">
+<meta name="twitter:image" content="https://alreadygo.github.io/images/lc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://alreadygo.github.io/2017/11/19/elasticsearch之cardinality浅析/">
+
+
+
+
+
+  <title>elasticsearch之cardinality浅析 | AlreadyGo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AlreadyGo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://alreadygo.github.io/2017/11/19/elasticsearch之cardinality浅析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hui Zhou">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlreadyGo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elasticsearch之cardinality浅析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-19T22:18:41+08:00">
+                2017-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>大数据时代,类似sum求和或者avg平均值的操作还是相对容易,而比如类似算网站uv或者<br>找出网站访问最频繁访客会比较困难,es中提供了一种cardinality聚合来解决这类问题.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET &quot;http://localhost:9200/_search&quot; -d&apos;</span><br><span class="line">&#123;</span><br><span class="line">    &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;monthly&quot;: &#123;</span><br><span class="line">            &quot;date_histogram&quot;: &#123;</span><br><span class="line">                &quot;field&quot;: &quot;timestamp&quot;,</span><br><span class="line">                &quot;interval&quot;: &quot;month&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;aggs&quot;: &#123;</span><br><span class="line">                &quot;visitor_count&quot;: &#123;</span><br><span class="line">                    &quot;cardinality&quot;: &#123;</span><br><span class="line">                        &quot;field&quot;: &quot;ip_address&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h2 id="基数估算算法"><a href="#基数估算算法" class="headerlink" title="基数估算算法"></a>基数估算算法</h2><p>数据集小的时候,当然可以使用hashset,但是数据量过大的时候,内存使用就会很致命.传统的基数计数实现有两种,基于B树和基于bitmap,B树在问题在于不能高效合并,bitmap问题在于bitmap的长度与集合中元素个数无关，而是与基数的上限有关,例如“00100110”表示集合 {2，5，6}。bitmap中1的数量就是这个集合的基数,<br>这两种方法在大数据场景下都会有内存问题.<br>幸运的是,还有其他的基数计数算法.其中比较有名的就是linear counting和loglog counting,HyperLogLog</p>
+<h3 id="lc算法"><a href="#lc算法" class="headerlink" title="lc算法"></a>lc算法</h3><p>LC的基本思路是：设有一哈希函数H，其哈希结果空间有m个值（最小值0，最大值m-1），并且哈希结果服从均匀分布。使用一个长度为m的bitmap，每个bit为一个桶，均初始化为0，设一个集合的基数为n，此集合所有元素通过H哈希到bitmap中，如果某一个元素被哈希到第k个比特并且第k个比特为0，则将其置为1。当集合所有元素哈希完成后，设bitmap中还有u个bit为0。则：<br>n^=−mlogumn^=−mlogum<br>为n的一个估计，且为最大似然估计（MLE）。<br><img src="/images/lc.png" alt="lc"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class LinearCounter &#123;</span><br><span class="line">    BitSet mask = new BitSet(m) // m is a design parameter</span><br><span class="line"> </span><br><span class="line">    void add(value) &#123;</span><br><span class="line">        int position = hash(value) // map the value to the range 0..m</span><br><span class="line">        mask.set(position) // sets a bit in the mask to 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>精度要求越高，则bitmap的长度越大。随着m和n的增大，m大约为n的十分之一。因此LC所需要的空间只有传统的bitmap直接映射方法的1/10.</p>
+<h3 id="llc算法"><a href="#llc算法" class="headerlink" title="llc算法"></a>llc算法</h3><p>LLC的空间复杂度仅有O(log2(log2(Nmax)))，使得通过KB级内存估计数亿级别的基数成为可能.<br>例如,假设基数的上限为1亿，原始bitmap方法需要12.5M内存，而LogLog Counting只需不到1K内存（640字节）就可以在标准误差不超过4%的精度下对基数进行估计,因此目前在处理大数据的基数计算问题时，所采用算法基本为LLC或其几个变种<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class LogLogCounter &#123;</span><br><span class="line">    int H           // H is a design parameter</span><br><span class="line">    int m = 2^k         // k is a design parameter</span><br><span class="line">    etype[] estimators = new etype[m] // etype is a design parameter</span><br><span class="line"> </span><br><span class="line">    void add(value) &#123;</span><br><span class="line">        hashedValue = hash(value)</span><br><span class="line">        bucket = getBits(hashedValue, 0, k)</span><br><span class="line">        estimators[bucket] = max(</span><br><span class="line">            estimators[bucket],</span><br><span class="line">            rank( getBits(hashedValue, k, H) )</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    getBits(value, int start, int end)</span><br><span class="line">    rank(value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>它们都是基于hash而非数值</li>
+<li>它们返回的结果都是近似值</li>
+<li>linear counting作为一个早期的算法,空间复杂度并不优秀,在基数大的时候结果会很不准,很少单独使用</li>
+<li>相比LC其最大的优势就是内存使用极少。不过LLC也有自己的问题，就是当n不是特别大时，其估计误差过大</li>
+<li>HyperLogLog是一种结合LC和LLC的一种改进算法,可以用相对固定的内存估算任意大集合的计数</li>
+</ul>
+<p>es中主要参考了google出品的HyperLogLog++算法,略有改动,在一定条件下,lc算法会升级到hll算法,详见es源码中org.elasticsearch.search.aggregations.metrics.cardinality.HyperLogLogPlusPlus类.</p>
+<h2 id="精度和内存"><a href="#精度和内存" class="headerlink" title="精度和内存"></a>精度和内存</h2><p>为了节约内存,精度方面会有所牺牲.es提供了一个可配置的precision_threshold参数,来配置cardinality的精度,<br>threshold参数的取值范围在0-4w,默认为3000,<br>精度和内存的使用都与这个参数相关,假设precision_threshold为N,那么你期望每个分片每个聚合桶上的内存大约是8*N字节.<br>源码中可以发现,precision_threshold会转化成precision精度,precision的取值范围在4-18,默认为14,<br>也就是对应precision_threshold=3000<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Compute the required precision so that &lt;code&gt;count&lt;/code&gt; distinct entries</span><br><span class="line"> * would be counted with linear counting.</span><br><span class="line"> */</span><br><span class="line">public static int precisionFromThreshold(long count) &#123;</span><br><span class="line">    final long hashTableEntries = (long) Math.ceil(count / MAX_LOAD_FACTOR);</span><br><span class="line">    int precision = PackedInts.bitsRequired(hashTableEntries * Integer.BYTES);</span><br><span class="line">    precision = Math.max(precision, MIN_PRECISION);</span><br><span class="line">    precision = Math.min(precision, MAX_PRECISION);</span><br><span class="line">    return precision;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面是一个<em>相对精度丢失图</em>:<br><img src="/images/cardinality_error.png" alt="cardinality error"><br>对于三种阈值,在不同基数下的精度丢失,可以发现就算阈值低至100,在百千万级别的数据量下.精度丢失也在5%以下</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+            <a href="/tags/cardinality/" rel="tag"># cardinality</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/elasticsearch-yml中重要的配置检查/" rel="next" title="elasticsearch.yml中重要的配置检查">
+                <i class="fa fa-chevron-left"></i> elasticsearch.yml中重要的配置检查
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/28/electron实现简单的爬虫客户端/" rel="prev" title="electron实现简单的爬虫客户端">
+                electron实现简单的爬虫客户端 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hui Zhou</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基数估算算法"><span class="nav-number">2.</span> <span class="nav-text">基数估算算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lc算法"><span class="nav-number">2.1.</span> <span class="nav-text">lc算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llc算法"><span class="nav-number">2.2.</span> <span class="nav-text">llc算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">2.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精度和内存"><span class="nav-number">3.</span> <span class="nav-text">精度和内存</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hui Zhou</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
