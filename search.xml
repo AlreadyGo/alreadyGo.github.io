@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
+    <title>线程池原理</title>
     <url>/2019/10/10/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4java%E6%89%8B%E5%86%8C%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<h2 id="阿里巴巴java手册中关于线程的说明"><a href="#阿里巴巴java手册中关于线程的说明" class="headerlink" title="阿里巴巴java手册中关于线程的说明"></a>阿里巴巴java手册中关于线程的说明</h2><p>1.【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯<br>正例:<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimerTaskThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123; <span class="function"><span class="keyword">public</span> <span class="title">TimerTaskThread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                  <span class="keyword">super</span>.setName(<span class="string">"TimerTaskThread"</span>);</span><br><span class="line">... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>2.【强制】线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。 说明:使用线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源的开销，解决 资源不足的问题。如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或 者“过度切换”的问题。<br>3.【强制】线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样<br>的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。 说明:Executors 返回的线程池对象的弊端如下:</p>
@@ -48,6 +48,9 @@
 <p>使用时：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Resource</span>(name = <span class="string">"consumerQueueThreadPool"</span>)</span><br><span class="line"><span class="keyword">private</span> ExecutorService consumerQueueThreadPool;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//消费队列</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        consumerQueueThreadPool.execute(<span class="keyword">new</span> ConsumerQueueThread());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
   </entry>
   <entry>
     <title>electron实现简单的爬虫客户端</title>
