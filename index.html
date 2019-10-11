@@ -308,7 +308,7 @@
 <li><p>CachedThreadPool 和 ScheduledThreadPool:<br>允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。</p>
 </li>
 </ul>
-<h2 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h2><p>首先是创建线程的 api：</p>
+<h2 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h2><h3 id="参数及工作原理"><a href="#参数及工作原理" class="headerlink" title="参数及工作原理"></a>参数及工作原理</h3><p>首先是创建线程的 api：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, RejectedExecutionHandler handler)</span><br></pre></td></tr></table></figure>
 <p>这几个核心参数的作用：</p>
 <ul>

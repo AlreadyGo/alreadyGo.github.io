@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="AlreadyGo">
 <meta property="og:description" content="阿里巴巴java手册中关于线程的说明1.【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯正例:1234public class TimerTaskThread extends Thread &amp;#123; public TimerTaskThread() &amp;#123;                  super.setName(&quot;TimerTaskThread&quot;);... &amp;#12">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-10T12:50:00.094Z">
+<meta property="og:updated_time" content="2019-10-11T02:08:46.469Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程池原理">
 <meta name="twitter:description" content="阿里巴巴java手册中关于线程的说明1.【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯正例:1234public class TimerTaskThread extends Thread &amp;#123; public TimerTaskThread() &amp;#123;                  super.setName(&quot;TimerTaskThread&quot;);... &amp;#12">
@@ -308,7 +308,7 @@
 <li><p>CachedThreadPool 和 ScheduledThreadPool:<br>允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。</p>
 </li>
 </ul>
-<h2 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h2><p>首先是创建线程的 api：</p>
+<h2 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h2><h3 id="参数及工作原理"><a href="#参数及工作原理" class="headerlink" title="参数及工作原理"></a>参数及工作原理</h3><p>首先是创建线程的 api：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, RejectedExecutionHandler handler)</span><br></pre></td></tr></table></figure>
 <p>这几个核心参数的作用：</p>
 <ul>
@@ -505,7 +505,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阿里巴巴java手册中关于线程的说明"><span class="nav-number">1.</span> <span class="nav-text">阿里巴巴java手册中关于线程的说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池原理"><span class="nav-number">2.</span> <span class="nav-text">线程池原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭线程池"><span class="nav-number">2.1.</span> <span class="nav-text">关闭线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置线程数"><span class="nav-number">2.2.</span> <span class="nav-text">配置线程数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-使用线程池"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot 使用线程池</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阿里巴巴java手册中关于线程的说明"><span class="nav-number">1.</span> <span class="nav-text">阿里巴巴java手册中关于线程的说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池原理"><span class="nav-number">2.</span> <span class="nav-text">线程池原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数及工作原理"><span class="nav-number">2.1.</span> <span class="nav-text">参数及工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭线程池"><span class="nav-number">2.2.</span> <span class="nav-text">关闭线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置线程数"><span class="nav-number">2.3.</span> <span class="nav-text">配置线程数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-使用线程池"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot 使用线程池</span></a></li></ol></div>
             
 
           </div>
