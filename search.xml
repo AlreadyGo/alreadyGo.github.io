@@ -57,7 +57,8 @@
     <title>electron实现简单的爬虫客户端</title>
     <url>/2018/01/28/electron%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E7%88%AC%E8%99%AB%E5%AE%A2%E6%88%B7%E7%AB%AF/</url>
     <content><![CDATA[<h3 id="下载客户端"><a href="#下载客户端" class="headerlink" title="下载客户端"></a>下载客户端</h3><p><a href="https://github.com/AlreadyGo/crawler-client/releases" target="_blank" rel="noopener">下载win客户端/绿色免安装</a></p>
-<h3 id="解压客户端压缩包"><a href="#解压客户端压缩包" class="headerlink" title="解压客户端压缩包"></a>解压客户端压缩包</h3><h3 id="双击crawler-devTools-exe"><a href="#双击crawler-devTools-exe" class="headerlink" title="双击crawler-devTools.exe"></a>双击crawler-devTools.exe</h3><p><img src="/images/crawler/crawler-devTools.png" alt="crawler-devTools.png"><br><a id="more"></a></p>
+<h3 id="解压客户端压缩包"><a href="#解压客户端压缩包" class="headerlink" title="解压客户端压缩包"></a>解压客户端压缩包</h3><a id="more"></a>
+<h3 id="双击crawler-devTools-exe"><a href="#双击crawler-devTools-exe" class="headerlink" title="双击crawler-devTools.exe"></a>双击crawler-devTools.exe</h3><p><img src="/images/crawler/crawler-devTools.png" alt="crawler-devTools.png"></p>
 <h3 id="在控制台执行代码"><a href="#在控制台执行代码" class="headerlink" title="在控制台执行代码"></a>在控制台执行代码</h3><ul>
 <li>$toggleCrawlerLog(): 打印log</li>
 <li>showDevTool(): 调出控制台<br><img src="/images/crawler/console.png" alt="console.png"><h3 id="爬取微博明星分类下前100页数据"><a href="#爬取微博明星分类下前100页数据" class="headerlink" title="爬取微博明星分类下前100页数据"></a>爬取微博明星分类下前100页数据</h3><a href="https://d.weibo.com/1087030002_2975_1003_0#" target="_blank" rel="noopener">微博链接</a><br><img src="/images/crawler/微博列表页.png" alt="微博列表页.png"><br>在控制台执行以下代码:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var config = [&#123;</span><br><span class="line">    type: &quot;waitFor&quot;,</span><br><span class="line">    selector: &quot;body .WB_miniblog .PCD_followlist&quot;,</span><br><span class="line">    timeout: 30</span><br><span class="line">&#125;, &#123;</span><br><span class="line">    type: &apos;script&apos;,</span><br><span class="line">    async: true,</span><br><span class="line">    timeout: 60,</span><br><span class="line">    func: function(args, target, callback) &#123;</span><br><span class="line">        new Promise(function(f) &#123;</span><br><span class="line">            if (window.jQuery &amp;&amp; window.$) return f(0);</span><br><span class="line">            var script = document.createElement(&quot;script&quot;);</span><br><span class="line">            script.type = &quot;text/javascript&quot;;</span><br><span class="line">            script.onload = f;</span><br><span class="line">            script.src = &quot;//cdn.bootcss.com/jquery/2.1.4/jquery.min.js&quot;;</span><br><span class="line">            document.body.appendChild(script);</span><br><span class="line">        &#125;).then(() =&gt; &#123;</span><br><span class="line">            var html = $(&apos;body .WB_miniblog&apos;);</span><br><span class="line"></span><br><span class="line">            function transform(t) &#123;</span><br><span class="line">                var r = [];</span><br><span class="line">                t.find(&apos;dd.mod_info&apos;).each((i, v) =&gt; &#123;</span><br><span class="line">                    var o = &#123;&#125;,</span><br><span class="line">                        $t = $(v);</span><br><span class="line">                    o.name = $t.find(&apos;.info_name a strong&apos;).text();</span><br><span class="line">                    o.url = $t.find(&apos;.info_name a&apos;).attr(&apos;href&apos;);</span><br><span class="line">                    o.connect = $t.find(&apos;.info_connect span:eq(0) .count&apos;).text();</span><br><span class="line">                    o.fans = $t.find(&apos;.info_connect span:eq(1) .count&apos;).text();</span><br><span class="line">                    o.weibo = $t.find(&apos;.info_connect span:eq(2) .count&apos;).text();</span><br><span class="line">                    o.address = $t.find(&apos;.info_add span&apos;).text();</span><br><span class="line">                    o.intro = $t.find(&apos;.info_intro span&apos;).text();</span><br><span class="line">                    r.push(o)</span><br><span class="line">                &#125;);</span><br><span class="line">                return r;</span><br><span class="line">            &#125;</span><br><span class="line">            target.data = transform(html);</span><br><span class="line">            target.cat = args.cat;</span><br><span class="line">            callback();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">let pool = new WebPagePool(5);</span><br><span class="line"></span><br><span class="line">let callback = data =&gt; &#123;</span><br><span class="line">    if (!result[data.cat])result[data.cat]=[];</span><br><span class="line">    result[data.cat].push(...data.data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let result=&#123;&#125;;</span><br><span class="line"></span><br><span class="line">let cats =</span><br><span class="line">    [&#123;&quot;url&quot;:&quot;https://d.weibo.com/1087030002_2975_1003_0&quot;,&quot;cat&quot;:&quot;明星&quot;,&quot;total&quot;:100&#125;];</span><br><span class="line"></span><br><span class="line">cats.forEach((cat)=&gt;&#123;</span><br><span class="line">    let len = cat.total;</span><br><span class="line">    for(var i=1;i&lt;len+1;i++)&#123;</span><br><span class="line">        pool.submit(config,Object.assign(&#123;&#125;,cat,&#123;url:`$&#123;cat.url&#125;?page=$&#123;i&#125;`&#125;),callback)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
@@ -117,8 +118,8 @@
 <h3 id="discovery-zen-minimum-master-nodes"><a href="#discovery-zen-minimum-master-nodes" class="headerlink" title="discovery.zen.minimum_master_nodes"></a>discovery.zen.minimum_master_nodes</h3><p>最小主节点数目,为了防止脑裂,需要设置发现超过半数的主节点候选者才能组成集群<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">discovery.zen.minimum_master_nodes: 2</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <tags>
-        <tag>es</tag>
         <tag>elasticsearch</tag>
+        <tag>es</tag>
       </tags>
   </entry>
   <entry>
@@ -145,8 +146,8 @@
 <h3 id="检查插件"><a href="#检查插件" class="headerlink" title="检查插件"></a>检查插件</h3><p>没有head<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ./bin/plugin list</span><br><span class="line">    - analysis-ik</span><br><span class="line">    - delete-by-query</span><br><span class="line">    - mapper-murmur3</span><br><span class="line">    - mapper-size</span><br><span class="line">    - repository-hdfs</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <tags>
-        <tag>es</tag>
         <tag>elasticsearch</tag>
+        <tag>es</tag>
       </tags>
   </entry>
   <entry>
@@ -203,8 +204,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>es</tag>
         <tag>elasticsearch</tag>
+        <tag>es</tag>
       </tags>
   </entry>
   <entry>
@@ -220,8 +221,8 @@
 <h2 id="重复步骤1-5"><a href="#重复步骤1-5" class="headerlink" title="重复步骤1-5"></a>重复步骤1-5</h2><h2 id="注意-检查allocation设置"><a href="#注意-检查allocation设置" class="headerlink" title="注意:检查allocation设置"></a>注意:检查allocation设置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -XGET  &apos;/_cluster/settings?pretty&amp;filter_path=**.enable&apos;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>es</tag>
         <tag>elasticsearch</tag>
+        <tag>es</tag>
       </tags>
   </entry>
   <entry>
