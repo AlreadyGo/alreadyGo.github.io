@@ -23,6 +23,27 @@
     </url>
     
     <url>
+        <loc>https://alreadygo.github.io/gallery/index.html</loc>
+        
+        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
+        
+    </url>
+    
+    <url>
+        <loc>https://alreadygo.github.io/about/index.html</loc>
+        
+        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
+        
+    </url>
+    
+    <url>
+        <loc>https://alreadygo.github.io/2017/01/22/%E8%AE%BE%E7%BD%AEnpm%E4%BB%A3%E7%90%86/</loc>
+        
+        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
+        
+    </url>
+    
+    <url>
         <loc>https://alreadygo.github.io/2017/03/21/shaowsocks/</loc>
         
         <lastmod>2019-10-10T11:48:38.203Z</lastmod>
@@ -37,42 +58,7 @@
     </url>
     
     <url>
-        <loc>https://alreadygo.github.io/about/index.html</loc>
-        
-        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>https://alreadygo.github.io/gallery/index.html</loc>
-        
-        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>https://alreadygo.github.io/2017/01/22/%E8%AE%BE%E7%BD%AEnpm%E4%BB%A3%E7%90%86/</loc>
-        
-        <lastmod>2019-10-10T11:48:38.203Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>https://alreadygo.github.io/2017/11/08/es%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE-%E9%9B%86%E7%BE%A4/</loc>
-        
-        <lastmod>2019-10-10T11:48:38.202Z</lastmod>
-        
-    </url>
-    
-    <url>
         <loc>https://alreadygo.github.io/2017/11/13/elasticsearch-yml%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5/</loc>
-        
-        <lastmod>2019-10-10T11:48:38.202Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>https://alreadygo.github.io/2017/11/19/elasticsearch%E4%B9%8Bcardinality%E6%B5%85%E6%9E%90/</loc>
         
         <lastmod>2019-10-10T11:48:38.202Z</lastmod>
         
@@ -94,6 +80,20 @@
     
     <url>
         <loc>https://alreadygo.github.io/2018/01/28/electron%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E7%88%AC%E8%99%AB%E5%AE%A2%E6%88%B7%E7%AB%AF/</loc>
+        
+        <lastmod>2019-10-10T11:48:38.202Z</lastmod>
+        
+    </url>
+    
+    <url>
+        <loc>https://alreadygo.github.io/2017/11/08/es%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE-%E9%9B%86%E7%BE%A4/</loc>
+        
+        <lastmod>2019-10-10T11:48:38.202Z</lastmod>
+        
+    </url>
+    
+    <url>
+        <loc>https://alreadygo.github.io/2017/11/19/elasticsearch%E4%B9%8Bcardinality%E6%B5%85%E6%9E%90/</loc>
         
         <lastmod>2019-10-10T11:48:38.202Z</lastmod>
         
