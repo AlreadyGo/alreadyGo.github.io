@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="AlreadyGo">
 <meta property="og:description" content="启动集群最小的配置 path.data 和 path.logs数据和日志文件路径123path:  logs: /var/log/elasticsearch  data: /var/data/elasticsearch 设置多个路径12345path:  data:    - /mnt/elasticsearch_1    - /mnt/elasticsearch_2    - /mnt/elas">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-10T11:48:38.202Z">
+<meta property="og:updated_time" content="2019-11-27T05:25:46.548Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch.yml中重要的配置检查">
 <meta name="twitter:description" content="启动集群最小的配置 path.data 和 path.logs数据和日志文件路径123path:  logs: /var/log/elasticsearch  data: /var/data/elasticsearch 设置多个路径12345path:  data:    - /mnt/elasticsearch_1    - /mnt/elasticsearch_2    - /mnt/elas">
@@ -214,7 +214,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-10-10 19:48:38" itemprop="dateModified" datetime="2019-10-10T19:48:38+08:00">2019-10-10</time>
+                <time title="Modified: 2019-11-27 13:25:46" itemprop="dateModified" datetime="2019-11-27T13:25:46+08:00">2019-11-27</time>
               </span>
 
           
@@ -231,6 +231,7 @@
         <p>启动集群最小的配置</p>
 <h3 id="path-data-和-path-logs"><a href="#path-data-和-path-logs" class="headerlink" title="path.data 和 path.logs"></a>path.data 和 path.logs</h3><p>数据和日志文件路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">path:</span><br><span class="line">  logs: /var/log/elasticsearch</span><br><span class="line">  data: /var/data/elasticsearch</span><br></pre></td></tr></table></figure></p>
 <p>设置多个路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">path:</span><br><span class="line">  data:</span><br><span class="line">    - /mnt/elasticsearch_1</span><br><span class="line">    - /mnt/elasticsearch_2</span><br><span class="line">    - /mnt/elasticsearch_3</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <h3 id="cluster-name"><a href="#cluster-name" class="headerlink" title="cluster.name"></a>cluster.name</h3><p>集群名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: logging-prod</span><br></pre></td></tr></table></figure></p>
 <h3 id="node-name"><a href="#node-name" class="headerlink" title="node.name"></a>node.name</h3><p>节点名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node.name: $&#123;HOSTNAME&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="bootstrap-memory-lock"><a href="#bootstrap-memory-lock" class="headerlink" title="bootstrap.memory_lock"></a>bootstrap.memory_lock</h3><p>锁定jvm只用内存,不使用硬盘<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bootstrap.memory_lock:true</span><br></pre></td></tr></table></figure></p>

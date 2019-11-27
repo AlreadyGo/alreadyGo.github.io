@@ -46,18 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos; 关闭单个节点">
+  <meta name="description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos;">
 <meta name="keywords" content="es,elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es集群滚动重启">
 <meta property="og:url" content="https://alreadygo.github.io/2017/10/22/es集群滚动重启/index.html">
 <meta property="og:site_name" content="AlreadyGo">
-<meta property="og:description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos; 关闭单个节点">
+<meta property="og:description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-10T11:48:38.202Z">
+<meta property="og:updated_time" content="2019-11-27T05:25:46.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es集群滚动重启">
-<meta name="twitter:description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos; 关闭单个节点">
+<meta name="twitter:description" content="禁止分片分配12345curl -XPUT &amp;apos;/_cluster/settings?pretty&amp;apos; -d &amp;apos;&amp;#123;  &amp;quot;transient&amp;quot;: &amp;#123;    &amp;quot;cluster.routing.allocation.enable&amp;quot;: &amp;quot;none&amp;quot;  &amp;#125;&amp;#125;&amp;apos;">
 
 <link rel="canonical" href="https://alreadygo.github.io/2017/10/22/es集群滚动重启/">
 
@@ -214,7 +214,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-10-10 19:48:38" itemprop="dateModified" datetime="2019-10-10T19:48:38+08:00">2019-10-10</time>
+                <time title="Modified: 2019-11-27 13:25:46" itemprop="dateModified" datetime="2019-11-27T13:25:46+08:00">2019-11-27</time>
               </span>
 
           
@@ -229,6 +229,7 @@
 
       
         <h2 id="禁止分片分配"><a href="#禁止分片分配" class="headerlink" title="禁止分片分配"></a>禁止分片分配</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT &apos;/_cluster/settings?pretty&apos; -d &apos;&#123;</span><br><span class="line">  &quot;transient&quot;: &#123;</span><br><span class="line">    &quot;cluster.routing.allocation.enable&quot;: &quot;none&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h2 id="关闭单个节点"><a href="#关闭单个节点" class="headerlink" title="关闭单个节点"></a>关闭单个节点</h2><p>关闭节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kill &lt;pid&gt;</span><br></pre></td></tr></table></figure></p>
 <h2 id="执行维护-升级等操作"><a href="#执行维护-升级等操作" class="headerlink" title="执行维护/升级等操作"></a>执行维护/升级等操作</h2><p>比如替换./plugins下某个文件夹,替换完成后执行./bin/plugin list 查看插件是否正常<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp esadmin@172.18.187.2:~/es-ik/elasticsearch-analysis-ik-1.9.3.zip ./</span><br></pre></td></tr></table></figure></p>
 <h2 id="重启节点"><a href="#重启节点" class="headerlink" title="重启节点"></a>重启节点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/elasticsearch -d</span><br></pre></td></tr></table></figure>

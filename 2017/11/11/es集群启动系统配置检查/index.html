@@ -46,18 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下: 1heap si">
+  <meta name="description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下:1heap siz">
 <meta name="keywords" content="es,elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es集群启动系统配置检查">
 <meta property="og:url" content="https://alreadygo.github.io/2017/11/11/es集群启动系统配置检查/index.html">
 <meta property="og:site_name" content="AlreadyGo">
-<meta property="og:description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下: 1heap si">
+<meta property="og:description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下:1heap siz">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-10T11:48:38.202Z">
+<meta property="og:updated_time" content="2019-11-27T05:25:46.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es集群启动系统配置检查">
-<meta name="twitter:description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下: 1heap si">
+<meta name="twitter:description" content="堆大小检查./bin/elasticsearch文件1ES_HEAP_SIZE=20G ./conf/jvm.options12-Xms2g -Xmx2g  把xms(堆初始化大小)和xmx(最大堆大小)设为相等 堆太小oom,堆太大gc停止时间越长 xmx不要超过机器物理内存的50% 因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下:1heap siz">
 
 <link rel="canonical" href="https://alreadygo.github.io/2017/11/11/es集群启动系统配置检查/">
 
@@ -214,7 +214,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-10-10 19:48:38" itemprop="dateModified" datetime="2019-10-10T19:48:38+08:00">2019-10-10</time>
+                <time title="Modified: 2019-11-27 13:25:46" itemprop="dateModified" datetime="2019-11-27T13:25:46+08:00">2019-11-27</time>
               </span>
 
           
@@ -234,11 +234,12 @@
 <li>把xms(堆初始化大小)和xmx(最大堆大小)设为相等</li>
 <li>堆太小oom,堆太大gc停止时间越长</li>
 <li>xmx不要超过机器物理内存的50%</li>
-<li><p>因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heap size [1.9gb], compressed ordinary object pointers [true]</span><br></pre></td></tr></table></figure>
+<li>因为jvm使用压缩对象指针,不要把xmx设超过临界点,临界点一般在靠近32G,正确的日志如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heap size [1.9gb], compressed ordinary object pointers [true]</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>尽量保持在zero-based compressed oops临界点以下,大多数系统临界点在26G是安全的,有一些系统可以达到30G<br>可以在启动es的时候加上XX:+UnlockDiagnosticVMOptions -XX:+PrintCompressedOopsMode两个jvm参数来检验下是否在临界点之下,会出现如下日志:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heap address: 0x000000011be00000, size: 27648 MB, zero based Compressed Oops</span><br></pre></td></tr></table></figure>
+</ul>
+<a id="more"></a>
+<ul>
+<li>尽量保持在zero-based compressed oops临界点以下,大多数系统临界点在26G是安全的,有一些系统可以达到30G<br>可以在启动es的时候加上XX:+UnlockDiagnosticVMOptions -XX:+PrintCompressedOopsMode两个jvm参数来检验下是否在临界点之下,会出现如下日志:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heap address: 0x000000011be00000, size: 27648 MB, zero based Compressed Oops</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>这段说明zero-based compressed oops生效了,而不是像这样:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heap address: 0x0000000118400000, size: 28672 MB, Compressed Oops with base: 0x00000001183ff000</span><br></pre></td></tr></table></figure></p>
