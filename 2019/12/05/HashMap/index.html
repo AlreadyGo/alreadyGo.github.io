@@ -46,20 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="1.无法远程连接mysql  1130 GRANT ALL PRIVILEGES ON . TO ‘myuser‘@’%’ IDENTIFIED BY ‘mypassword’ WITH GRANT OPTION;">
-<meta name="keywords" content="mysql,linux">
+  <meta name="description" content="Q1：HashMap 的数据结构？ A1：哈希表结构（链表散列：数组+链表）实现，结合数组和链表的优点。当链表长度超过 8 时，链表转换为红黑树。 Q2：HashMap默认大小是多少？如果传入指定大小是20，那么实际大小是多少？ Q3：HashMap对key进行hash操作的时候有什么特殊处理吗？ Q4：put操作当发生hash碰撞，数据插入链表时，是插入链表头部还是尾部？ Q5：HashMap会">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux下安装mysql常见问题">
-<meta property="og:url" content="https://alreadygo.github.io/2017/01/21/linux下安装mysql常见问题/index.html">
+<meta property="og:title" content="HashMap">
+<meta property="og:url" content="https://alreadygo.github.io/2019/12/05/HashMap/index.html">
 <meta property="og:site_name" content="AlreadyGo">
-<meta property="og:description" content="1.无法远程连接mysql  1130 GRANT ALL PRIVILEGES ON . TO ‘myuser‘@’%’ IDENTIFIED BY ‘mypassword’ WITH GRANT OPTION;">
+<meta property="og:description" content="Q1：HashMap 的数据结构？ A1：哈希表结构（链表散列：数组+链表）实现，结合数组和链表的优点。当链表长度超过 8 时，链表转换为红黑树。 Q2：HashMap默认大小是多少？如果传入指定大小是20，那么实际大小是多少？ Q3：HashMap对key进行hash操作的时候有什么特殊处理吗？ Q4：put操作当发生hash碰撞，数据插入链表时，是插入链表头部还是尾部？ Q5：HashMap会">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-27T05:25:46.569Z">
+<meta property="og:updated_time" content="2019-12-05T09:54:42.721Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux下安装mysql常见问题">
-<meta name="twitter:description" content="1.无法远程连接mysql  1130 GRANT ALL PRIVILEGES ON . TO ‘myuser‘@’%’ IDENTIFIED BY ‘mypassword’ WITH GRANT OPTION;">
+<meta name="twitter:title" content="HashMap">
+<meta name="twitter:description" content="Q1：HashMap 的数据结构？ A1：哈希表结构（链表散列：数组+链表）实现，结合数组和链表的优点。当链表长度超过 8 时，链表转换为红黑树。 Q2：HashMap默认大小是多少？如果传入指定大小是20，那么实际大小是多少？ Q3：HashMap对key进行hash操作的时候有什么特殊处理吗？ Q4：put操作当发生hash碰撞，数据插入链表时，是插入链表头部还是尾部？ Q5：HashMap会">
 
-<link rel="canonical" href="https://alreadygo.github.io/2017/01/21/linux下安装mysql常见问题/">
+<link rel="canonical" href="https://alreadygo.github.io/2019/12/05/HashMap/">
 
 
 <script id="page-configurations">
@@ -73,7 +73,7 @@
   };
 </script>
 
-  <title>linux下安装mysql常见问题 | AlreadyGo</title>
+  <title>HashMap | AlreadyGo</title>
   
 
 
@@ -184,7 +184,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://alreadygo.github.io/2017/01/21/linux下安装mysql常见问题/">
+    <link itemprop="mainEntityOfPage" href="https://alreadygo.github.io/2019/12/05/HashMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -197,7 +197,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          linux下安装mysql常见问题
+          HashMap
         </h1>
 
         <div class="post-meta">
@@ -206,16 +206,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2017-01-21 01:07:17" itemprop="dateCreated datePublished" datetime="2017-01-21T01:07:17+08:00">2017-01-21</time>
+              <time title="Created: 2019-12-05 18:21:48 / Modified: 17:54:42" itemprop="dateCreated datePublished" datetime="2019-12-05T18:21:48+08:00">2019-12-05</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-27 13:25:46" itemprop="dateModified" datetime="2019-11-27T13:25:46+08:00">2019-11-27</time>
-              </span>
 
           
 
@@ -228,15 +222,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>1.无法远程连接mysql  1130</p>
-<p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘myuser‘@’%’ IDENTIFIED BY ‘mypassword’ WITH GRANT OPTION;<br><a id="more"></a></p>
-<p>2.服务端中文乱码</p>
-<p>[mysqld]</p>
-<p>character_set_server=utf8</p>
-<p>service mysql restart</p>
-<p>此时,</p>
-<p><pre>mysql -u root -p</pre><br>status</p>
-<p>会有类似的结果:Server characterset: utf8</p>
+        <p>Q1：HashMap 的数据结构？</p>
+<p>A1：哈希表结构（链表散列：数组+链表）实现，结合数组和链表的优点。当链表长度超过 8 时，链表转换为红黑树。</p>
+<p>Q2：HashMap默认大小是多少？如果传入指定大小是20，那么实际大小是多少？</p>
+<p>Q3：HashMap对key进行hash操作的时候有什么特殊处理吗？</p>
+<p>Q4：put操作当发生hash碰撞，数据插入链表时，是插入链表头部还是尾部？</p>
+<p>Q5：HashMap会出现死循环吗？</p>
+<p>Q6：链表长度超过 8 时一定会转换成红黑树吗？</p>
+<a id="more"></a>
+<h2 id="先贴一段简单的代码"><a href="#先贴一段简单的代码" class="headerlink" title="先贴一段简单的代码"></a>先贴一段简单的代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">    map.put(i, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>A2：默认大小是16<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">n初始值是19</span><br><span class="line"></span><br><span class="line">n		10011</span><br><span class="line">n&gt;1		01001</span><br><span class="line">		11011</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n		11011</span><br><span class="line">n&gt;2		00110</span><br><span class="line">		11111</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n		11111</span><br><span class="line">n&gt;4		00001</span><br><span class="line">		11111</span><br><span class="line"></span><br><span class="line">-------------</span><br><span class="line">n初始值是20</span><br><span class="line"></span><br><span class="line">n		10100</span><br><span class="line">n&gt;1		01010</span><br><span class="line">		11110</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n		11110</span><br><span class="line">n&gt;2		00111</span><br><span class="line">		11111</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n		11111</span><br><span class="line">n&gt;4		00001</span><br><span class="line">		11111</span><br></pre></td></tr></table></figure></p>
+<p>tableSizeFor方法如果入参是2的整数幂则返回本身，如果不是则返回大于入参的最小整数幂，如果入参是20，实际返回值则为32<br>为什么这么设计，是因为从Key映射到HashMap数组的对应位置，会用到一个Hash函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index =  HashCode（Key） &amp;  （Length - 1）</span><br></pre></td></tr></table></figure></p>
+<p>length取2的整数幂会让数据分布的更均匀</p>
+<p>A3:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">static final int hash(Object key) &#123;</span><br><span class="line">    int h;</span><br><span class="line">    return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个操作是把 key 的 hashCode 值与 hashCode 值右移 16 位做异或（不同为 1，相同为 0），这样就是把哈希值的高位和低位一起混合计算，这样就能使生成的 hash 值更离散，和A2中的作用是一样的</p>
+<p>A4：HashMap在jdk1.7中采用头插入法，在扩容时会改变链表中元素原本的顺序，以至于在并发场景下导致链表成环的问题。而在jdk1.8中采用尾插入法，在扩容时会保持链表元素原本的顺序，就不会出现链表成环的问题了</p>
+<p>总结一下HashMap1.7和1.8的变化：</p>
+<ul>
+<li>1.7采用数组+单链表，1.8在单链表超过一定长度后改成红黑树存储</li>
+<li>1.7扩容时需要重新计算哈希值和索引位置，1.8并不重新计算哈希值，巧妙地采用和扩容后容量进行&amp;操作来计算新的索引位置。</li>
+<li>1.7插入元素到单链表中采用头插入法，1.8采用的是尾插入法。</li>
+</ul>
 
     </div>
 
@@ -246,8 +252,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/mysql/" rel="tag"># mysql</a>
-              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/java/" rel="tag"># java</a>
           </div>
 
         
@@ -255,11 +260,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2017/01/22/设置npm代理/" rel="next" title="设置npm代理">
-      设置npm代理 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/10/10/阿里巴巴java手册中关于线程的说明/" rel="prev" title="线程池原理">
+      <i class="fa fa-chevron-left"></i> 线程池原理
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -297,6 +302,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先贴一段简单的代码"><span class="nav-number">1.</span> <span class="nav-text">先贴一段简单的代码</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
